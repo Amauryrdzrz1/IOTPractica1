@@ -1,4 +1,7 @@
 setsEstudiantes = []
+from Archivos import *
+import csv
+
 class classEstudiante:
     
     def __init__(self, matricula, nombre, grupo, adeudo):
@@ -12,7 +15,16 @@ class classEstudiante:
         self.nombre = input("Ingresar nombre: ")
         self.grupo = input("Ingresar grupo: ")
         setsEstudiantes.append(classEstudiante(self.matricula, self.nombre, self.grupo, None))
+        with open('estudiantes.csv', 'a') as f:
+            csv_escritor = csv.DictWriter(f, fieldnames =['matricula','nombre','grupo','adeudo'])
+            csv_escritor.writeheader()
+            csv_escritor.writerow({'matricula':self.matricula,
+                                     'nombre':self.nombre,
+                                     'grupo':self.grupo,
+                                     'adeudo':self.adeudo
+                })
         print("El Estudiante ha sido registrado!")
+
     
     def actualizaAdeudo(self, matricula, adeudo):
         self.matricula = matricula

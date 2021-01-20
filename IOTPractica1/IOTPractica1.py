@@ -2,6 +2,7 @@ from datetime import date
 from estudiante import classEstudiante as e
 from objeto import classObjeto as o
 from prestamoRetorno import classPrestamo as p
+from Archivos import lecturaArchivos as v
 
 x=0
 claveobj = 0
@@ -17,6 +18,7 @@ print(fechaP)
 estud = e(matricula,nombre, grupo,adeudo)
 objet = o(claveobj,nombre)
 prestamo = p(idprestamo,estud,objet,fechaP,fechaE)
+verestudiantes = v(matricula,nombre,grupo,adeudo)
 
 while x!=9:
   print("~~Menu~~");
@@ -59,6 +61,7 @@ while x!=9:
 
   elif x == 5:
     estud.verEstudiante()
+    verestudiantes.verEstudiantes()
 
   elif x == 6:
     objet.verObjeto()
