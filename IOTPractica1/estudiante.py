@@ -17,22 +17,11 @@ class classEstudiante:
         self.grupo = grupo
         self.escribirEstudiantes(self.matricula, self.nombre, self.grupo, self.adeudo)
     
-    def actualizaAdeudo(self, matricula, adeudo):
+    def actualizaAdeudo(self, matricula):
         self.matricula = matricula
-        idx = 0
-        for estudiante in setsEstudiantes: 
-            if estudiante.matricula == self.matricula:
-                estudiante.adeudo = adeudo
-                est = {
-                    "Matricula":estudiante.matricula,
-                    "Nombre":estudiante.nombre,
-                    "Grupo":estudiante.grupo,
-                    "Adeudo":estudiante.adeudo
-                    }
-                print(est) 
-                setsEstudiantes.pop(idx)
-                setsEstudiantes.append(classEstudiante(estudiante.matricula, estudiante.nombre, estudiante.grupo, estudiante.adeudo))
-            idx = idx + 1
+        hizoprestamo = p(self.matricula, self.nombre, self.grupo, self.adeudo)
+        hizoprestamo.hizoPrestamo(matricula)
+
 
     def verEstudiante(self):
         for estudiante in setsEstudiantes: 

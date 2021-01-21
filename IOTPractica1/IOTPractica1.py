@@ -33,6 +33,7 @@ while x!=9:
   print("8.- eliminar usuario/objeto");
   print("9.- Salir");
   x=int(input("Selecciona una opcion: "));
+
   if x == 1:
     nombre = input("escribe el nombre del estudiante: ")
     grupo = input("escribe el grupo: ")
@@ -50,18 +51,17 @@ while x!=9:
             objeto = objet.buscarObjeto(claveobj)
             if objeto != None:
                 prestamo.hacerPrestamo(matricula,objeto,date.today(),None)
-                estud.actualizaAdeudo(matricula,adeudo)
+                estud.actualizaAdeudo(matricula)
             else:
                 print("no se ha encontrado el objeto")
         else: 
-            print("estudiante con adeudo")
+           print("estudiante con adeudo")
     else:
         print("no se ha encontrado al estudiante")
 
   elif x == 4:
-      matricula = prestamo.hacerRetorno(idprestamo,date.today())
-      if matricula != None:
-          estud.actualizaAdeudo(matricula,False)
+      idprestamo = int(input("escribe el id del prestamo: "))
+      prestamo.escribirRetorno(idprestamo,fechaE)
 
   elif x == 5:
     estud.verEstudiante()

@@ -28,11 +28,13 @@ class archivoObjetos:
     
     def buscarObjeto(self,claveObjeto):
         filename = 'objetos.csv'
+        clave = None
         with open(filename,'r') as file:
             csv_reader = csv.DictReader(file, fieldnames = ['claveObjeto', 'nombre'])
             for row in csv_reader:
                 if row['claveObjeto']  == str(claveObjeto):
-                    print(row)
+                    clave = claveObjeto
+        return clave
     
     def obtenerIncremental(self):
         id_file = 0

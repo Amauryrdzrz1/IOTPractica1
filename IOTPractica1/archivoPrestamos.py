@@ -1,3 +1,7 @@
+import csv
+from tempfile import NamedTemporaryFile
+import shutil
+
 class archivoPrestamos:
     def __init__(self,idprestamo, estudiante, objeto, fechaprestamo, fecharetorno):
         self.idprestamo= idprestamo

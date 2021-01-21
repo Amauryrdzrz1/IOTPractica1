@@ -33,7 +33,17 @@ class lecturaArchivos:
                                'adeudo': adeudo
                                })
     
-    def buscarEstudiante(self, matricula):
+    def buscarEstudiante(self,matricula):
+        filename = 'estudiantes.csv'
+        clave = None
+        with open(filename,'r') as file:
+            csv_reader = csv.DictReader(file, fieldnames = ['matricula', 'nombre'])
+            for row in csv_reader:
+                if row['matricula']  == str(matricula):
+                    clave = matricula
+        return clave
+
+    def cambiarAdeudo(self, matricula):
         tempfile = NamedTemporaryFile(mode='w', delete = False,encoding='utf8', newline='')
         filename = 'estudiantes.csv'
         matriculaEncontrada = None
@@ -44,7 +54,7 @@ class lecturaArchivos:
             for row in csv_reader:
                 if row['matricula']  == str(matricula):
                     print('matricula a actualizar->',row['matricula'])
-                    row['adeudo'] = True
+                    row['adeudo'] = False
                     matriculaEncontrada = matricula
                 row = {'matricula': row['matricula'], 'nombre': row['nombre'], 'grupo': row['grupo'], 'adeudo': row['adeudo']}
                 writer.writerow(row)
@@ -69,3 +79,21 @@ class lecturaArchivos:
             csv_escritor.writeheader()
             csv_escritor.writerow({'id': id_file});
             return id_file;
+        
+    def hizoPrestamo(self,matricula):
+        tempfile = NamedTemporaryFile(mode='w', delete = False,encoding='utf8', newline='')
+        filename = 'estudiantes.csv'
+        matriculaEncontrada = None
+        with open(filename,'r') as file, tempfile:
+            csv_reader = csv.DictReader(file, fieldnames = ['matricula', 'nombre', 'grupo', 'adeudo'])
+            writer = csv.DictWriter(tempfile, fieldnames = ['matricula', 'nombre', 'grupo', 'adeudo'])
+            
+            for row in csv_reader:
+                if row['matricula']  == str(matricula):
+                    print('matricula a actualizar->',row['matricula'])
+                    row['adeudo'] = True
+                    matriculaEncontrada = matricula
+                row = {'matricula': row['matricula'], 'nombre': row['nombre'], 'grupo': row['grupo'], 'adeudo': row['adeudo']}
+                writer.writerow(row)
+
+        shutil.move(tempfile.name, filename)

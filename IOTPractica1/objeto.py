@@ -15,8 +15,8 @@ class classObjeto:
     def buscarObjeto(self, claveObjeto):
         self.claveObjeto = int(input("ingresa la clave del objeto: "))
         buscar = o(self.claveObjeto,self.nombre)
-        mat = buscar.buscarObjeto(self.claveObjeto)
-        return mat;
+        matr = buscar.buscarObjeto(self.claveObjeto)
+        return matr;
 
     def eliminarObjeto(self, claveObjeto):
         self.claveObjeto = int(input("ingresa la clave del objeto a eliminar: "))

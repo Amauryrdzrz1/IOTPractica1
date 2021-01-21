@@ -1,5 +1,9 @@
 import csv
 from archivoPrestamos import archivoPrestamos as archi
+from tempfile import NamedTemporaryFile
+import shutil
+from Archivos import lecturaArchivos as lec
+
 class classPrestamo:
     
     def __init__(self,idprestamo, estudiante, objeto, fechaprestamo, fecharetorno):
@@ -10,30 +14,15 @@ class classPrestamo:
         self.fecharetorno = fecharetorno
     
     def hacerPrestamo(self, estudiante, objeto, fechaprestamo,fecharetorno):
-        self.idprestamo = self.idprestamo + 1
-        setsPrestamo.append(classPrestamo(self.idprestamo,estudiante,objeto,fechaprestamo,fecharetorno))
+        arcp = archi(self.idprestamo, self.estudiante, self.objeto, self.fechaprestamo, self.fecharetorno)
+        self.idprestamo = arcp.obtenerIncremental()
+        self.escribirPrestamo(self.idprestamo, estudiante,objeto,fechaprestamo,fecharetorno)
         print("El prestamo ha sido registrado!")
 
     def hacerRetorno(self, idprestamo, fecharetorno):
-        idx = 0
         matricula = None
         idprestamo = int(input("Ingresa el id del prestamo: "))
-        for prestamo in setsPrestamo: 
-            if prestamo.idprestamo == idprestamo and prestamo.fecharetorno == None:
-                prestamo.fecharetorno = fecharetorno
-                pre = {
-                    "idprestamo":prestamo.idprestamo,
-                    "estudiante":prestamo.estudiante,
-                    "objeto":prestamo.objeto,
-                    "fechaprestamo":prestamo.fechaprestamo,
-                    "fecharetorno":prestamo.fecharetorno,
-                    }
-                print(pre)
-                setsPrestamo.pop(idx)
-                setsPrestamo.append(classPrestamo(prestamo.idprestamo,prestamo.estudiante,prestamo.objeto,prestamo.fechaprestamo,prestamo.fecharetorno))
-                matricula = prestamo.estudiante
-            idx = idx + 1
-        return matricula
+        self.escribirRetorno(idprestamo,fecharetorno)
 
     def verPrestamos(self):
         for prestamo in setsPrestamo: 
@@ -48,17 +37,13 @@ class classPrestamo:
 
     def validaEstudiante(self,matricula):
         debe = False
-        for prestamo in setsPrestamo: 
-            if prestamo.estudiante == matricula and prestamo.fecharetorno == None:
-                debe = True
-                pre = {
-                    "idprestamo":prestamo.idprestamo,
-                    "estudiante":prestamo.estudiante,
-                    "objeto":prestamo.objeto,
-                    "fechaprestamo":prestamo.fechaprestamo,
-                    "fecharetorno":prestamo.fecharetorno,
-                    }
-                print(pre)
+        filename = 'estudiantes.csv'
+        clave = None
+        with open(filename,'r') as file:
+            csv_reader = csv.DictReader(file, fieldnames = ['matricula','nombre','grupo','adeudo'])
+            for row in csv_reader:
+                if row['matricula']  == str(matricula) :
+                    debe = row['adeudo']
         return debe
     
     def escribirPrestamo(self,idprestamo, estudiante, objeto, fechaprestamo, fecharetorno):
@@ -76,3 +61,26 @@ class classPrestamo:
                                    'fecharetorno': fecharetorno
                                    })
     
+    def escribirRetorno(self,idprestamo,fecharetorno):
+        matricula = 0
+        nombre = ""
+        grupo = ""
+        adeudo = None
+        e = lec(matricula,nombre,grupo,adeudo)
+        tempfile = NamedTemporaryFile(mode='w', delete = False,encoding='utf8', newline='')
+        filename = 'prestamos.csv'
+        clave = None
+        with open(filename,'r') as file, tempfile:
+            csv_reader = csv.DictReader(file, fieldnames = ['idprestamo', 'estudiante', 'objeto', 'fechaprestamo','fecharetorno'])
+            writer = csv.DictWriter(tempfile, fieldnames = ['idprestamo', 'estudiante', 'objeto', 'fechaprestamo','fecharetorno'])
+            
+            for row in csv_reader:
+                if row['idprestamo']  == str(idprestamo):
+                    print('prestamo a actualizar->',row['idprestamo'])
+                    row['fecharetorno'] = fecharetorno
+                    clave = row['estudiante']
+                row = {'idprestamo': row['idprestamo'], 'estudiante': row['estudiante'], 'objeto': row['objeto'], 'fechaprestamo': row['fechaprestamo'],'fecharetorno': row['fecharetorno']}
+                writer.writerow(row)
+
+        shutil.move(tempfile.name, filename)
+        e.cambiarAdeudo(clave)
