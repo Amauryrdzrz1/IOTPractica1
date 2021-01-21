@@ -1,5 +1,5 @@
-arrayPrestamoRetorno = []
-setsPrestamo = []
+import csv
+from archivoPrestamos import archivoPrestamos as archi
 class classPrestamo:
     
     def __init__(self,idprestamo, estudiante, objeto, fechaprestamo, fecharetorno):
@@ -60,4 +60,19 @@ class classPrestamo:
                     }
                 print(pre)
         return debe
+    
+    def escribirPrestamo(self,idprestamo, estudiante, objeto, fechaprestamo, fecharetorno):
+        with open('prestamos.csv', 'a', newline='\n') as file:
+                csv_escritor = csv.DictWriter(
+                    file, fieldnames=['idprestamo', 'estudiante', 'objeto', 'fechaprestamo','fecharetorno'])
+
+                if file.tell() == 0:
+                    csv_escritor.writeheader()
+
+                csv_escritor.writerow({'idprestamo': idprestamo,
+                                   'estudiante': estudiante,
+                                   'objeto': objeto,
+                                   'fechaprestamo': fechaprestamo,
+                                   'fecharetorno': fecharetorno
+                                   })
     

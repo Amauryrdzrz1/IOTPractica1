@@ -3,14 +3,14 @@ from estudiante import classEstudiante as e
 from objeto import classObjeto as o
 from prestamoRetorno import classPrestamo as p
 from Archivos import lecturaArchivos as v
-
+from archivoObjetos import archivoObjetos as arco
 x=0
 claveobj = 0
 matricula = 0
 idprestamo = 0
 nombre = ""
 grupo = ""
-adeudo = True
+adeudo = False
 debe = False
 fechaP= date.today()
 fechaE= date.today()
@@ -19,6 +19,7 @@ estud = e(matricula,nombre, grupo,adeudo)
 objet = o(claveobj,nombre)
 prestamo = p(idprestamo,estud,objet,fechaP,fechaE)
 verestudiantes = v(matricula,nombre,grupo,adeudo)
+archo = arco(claveobj,nombre)
 
 while x!=9:
   print("~~Menu~~");
@@ -33,9 +34,12 @@ while x!=9:
   print("9.- Salir");
   x=int(input("Selecciona una opcion: "));
   if x == 1:
+    nombre = input("escribe el nombre del estudiante: ")
+    grupo = input("escribe el grupo: ")
     estud.ingresarDatos(nombre,grupo)
 
   elif x == 2:
+    nombre = input("escribe el nombre del objeto a registrar: ")
     objet.ingresarObjeto(nombre)
 
   elif x == 3:
@@ -64,8 +68,9 @@ while x!=9:
     verestudiantes.verEstudiantes()
 
   elif x == 6:
-    objet.verObjeto()
-  
+    #objet.verObjeto()
+    archo.verObjetos()
+
   elif x == 7:
       prestamo.verPrestamos()
 

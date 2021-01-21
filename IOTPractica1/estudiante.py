@@ -1,5 +1,5 @@
 setsEstudiantes = []
-from Archivos import *
+from Archivos import lecturaArchivos as p
 import csv
 
 class classEstudiante:
@@ -11,20 +11,11 @@ class classEstudiante:
         self.adeudo = adeudo
     
     def ingresarDatos(self, nombre, grupo):
-        self.matricula = self.matricula + 1
-        self.nombre = input("Ingresar nombre: ")
-        self.grupo = input("Ingresar grupo: ")
-        setsEstudiantes.append(classEstudiante(self.matricula, self.nombre, self.grupo, None))
-        with open('estudiantes.csv', 'a') as f:
-            csv_escritor = csv.DictWriter(f, fieldnames =['matricula','nombre','grupo','adeudo'])
-            csv_escritor.writeheader()
-            csv_escritor.writerow({'matricula':self.matricula,
-                                     'nombre':self.nombre,
-                                     'grupo':self.grupo,
-                                     'adeudo':self.adeudo
-                })
-        print("El Estudiante ha sido registrado!")
-
+        obtenIncremental = p(self.matricula, self.nombre, self.grupo, self.adeudo)
+        self.matricula = obtenIncremental.obtenerIncremental()
+        self.nombre = nombre
+        self.grupo = grupo
+        self.escribirEstudiantes(self.matricula, self.nombre, self.grupo, self.adeudo)
     
     def actualizaAdeudo(self, matricula, adeudo):
         self.matricula = matricula
@@ -55,16 +46,9 @@ class classEstudiante:
             
     def buscarEstudiante(self, matricula):
         self.matricula = int(input("ingresa la matricula del estudiante: "))
-        for estudiante in setsEstudiantes: 
-            if estudiante.matricula == self.matricula:
-                est = {
-                    "Matricula":estudiante.matricula,
-                    "Nombre":estudiante.nombre,
-                    "Grupo":estudiante.grupo,
-                    "Adeudo":estudiante.adeudo
-                    }
-                print(est) 
-                return estudiante.matricula
+        buscaEstudiante = p(self.matricula,self.nombre,self.grupo,self.adeudo)
+        mat = buscaEstudiante.buscarEstudiante(self.matricula)
+        return mat;
 
     def eliminarEstudiante(self, matricula):
         self.matricula = int(input("ingresa la matricula del estudiante a eliminar: "))
@@ -81,4 +65,19 @@ class classEstudiante:
                 print(est)
                 setsEstudiantes.pop(idx)
             idx += 1 
-                
+
+    def escribirEstudiantes(self, matricula, nombre, grupo, adeudo):
+
+        with open('estudiantes.csv', 'a', newline='\n') as file:
+            csv_escritor = csv.DictWriter(
+                file, fieldnames=['matricula', 'nombre', 'grupo', 'adeudo'])
+
+            if file.tell() == 0:
+                csv_escritor.writeheader()
+
+            csv_escritor.writerow({'matricula': matricula,
+                               'nombre': nombre,
+                               'grupo': grupo,
+                               'adeudo': adeudo
+                               })
+    

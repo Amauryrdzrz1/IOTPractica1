@@ -21,7 +21,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="archivoPrestamos.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Archivos.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="archivoObjetos.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="prestamoRetorno.py">
